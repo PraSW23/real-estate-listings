@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
+import PropertyList from './pages/PropertyList';
+import PropertyDetails from './pages/PropertyDetails';
+import UserDashboard from './pages/UserDashboard';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<UserDashboard />} /> {/* Add this route for the root URL */}
+        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/PropertyList" element={<PropertyList />} />
+        <Route path="/PropertyDetails/:id" element={<PropertyDetails />} />
+        <Route path="/UserDashboard" element={<UserDashboard />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
