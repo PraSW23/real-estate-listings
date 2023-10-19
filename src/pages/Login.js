@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
@@ -6,7 +6,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleLogin = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -17,27 +17,29 @@ const Login = () => {
       // Handle any errors that occur during login
       console.error(error);
     }
-  };
+  }, [email, password]);
 
   return (
     <div>
       <h2>Login</h2>
       <Form onSubmit={handleLogin}>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
+        <Form.Group>
+          <label htmlFor="email">Email</label>
           <Form.Control
             type="email"
             placeholder="Enter email"
+            name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
+        <Form.Group>
+          <label htmlFor="password">Password</label>
           <Form.Control
             type="password"
             placeholder="Enter password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

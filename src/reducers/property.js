@@ -2,8 +2,9 @@ import axios from 'axios';
 
 // Action Types
 const FETCH_PROPERTIES = 'FETCH_PROPERTIES';
+const SELECT_PROPERTY = 'SELECT_PROPERTY';
 
-// Action Creator
+// Action Creators
 export const fetchProperties = () => {
   return async (dispatch) => {
     try {
@@ -16,7 +17,25 @@ export const fetchProperties = () => {
   };
 };
 
+export const selectProperty = (property) => {
+  return { type: SELECT_PROPERTY, payload: property };
+};
+
 // Reducer
-// ...
+const initialState = {
+  properties: [],
+  activeProperty: null
+};
+
+const propertyReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case FETCH_PROPERTIES:
+      return { ...state, properties: action.payload };
+    case SELECT_PROPERTY:
+      return { ...state, activeProperty: action.payload };
+    default:
+      return state;
+  }
+};
 
 export default propertyReducer;

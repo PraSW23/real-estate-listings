@@ -23,21 +23,23 @@ const SignUp = () => {
     <div>
       <h2>Sign Up</h2>
       <Form onSubmit={handleSignUp}>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
+        <Form.Group>
+          <label htmlFor="email">Email</label>
           <Form.Control
             type="email"
             placeholder="Enter email"
+            name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
+        <Form.Group>
+          <label htmlFor="password">Password</label>
           <Form.Control
             type="password"
             placeholder="Enter password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

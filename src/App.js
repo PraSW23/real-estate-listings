@@ -10,7 +10,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<UserDashboard />} /> {/* Add this route for the root URL */}
+        <Route path="/" element={<UserDashboard />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/PropertyList" element={<PropertyList />} />

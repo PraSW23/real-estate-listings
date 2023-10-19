@@ -25,7 +25,7 @@ const PropertyList = () => {
     <div>
       <h2>Property List</h2>
       <PropertySearch onSearch={handleSearch} />
-      {properties.length === 0 ? (
+      {properties && properties.length === 0 ? (
         <p>No properties found.</p>
       ) : (
         properties.map((property) => (

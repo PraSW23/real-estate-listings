@@ -1,4 +1,5 @@
 // ...
+import { SAVE_PROPERTY, ADD_CONTACT_HISTORY } from './ActionTypes'; // Replace 'ActionTypes' with the actual file name
 
 // Reducer
 const initialState = {

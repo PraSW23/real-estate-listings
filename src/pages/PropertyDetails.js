@@ -29,7 +29,7 @@ const PropertyDetails = () => {
     <div>
       <h2>Property Details</h2>
       <Card style={{ width: '18rem' }}>
-        {property.images.map((image, index) => (
+        {property.images && property.images.map((image, index) => (
           <Card.Img key={index} variant="top" src={image} />
         ))}
         <Card.Body>

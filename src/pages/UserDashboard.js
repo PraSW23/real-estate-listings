@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const UserDashboard = () => {
   const savedProperties = useSelector((state) => state.auth.savedProperties);
   const contactHistory = useSelector((state) => state.auth.contactHistory);
+  const [activeProperty, setActiveProperty] = useState(null);
+
+  const handlePropertyClick = (property) => {
+    setActiveProperty(property);
+  };
 
   return (
     <div>
@@ -14,9 +19,23 @@ const UserDashboard = () => {
       ) : (
         <ul>
           {savedProperties.map((property) => (
-            <li key={property.id}>{property.address}</li>
+            <li
+              key={property.id}
+              onClick={() => handlePropertyClick(property)}
+              style={{ cursor: 'pointer', fontWeight: activeProperty === property ? 'bold' : 'normal' }}
+            >
+              {property.address}
+            </li>
           ))}
         </ul>
+      )}
+
+      {activeProperty && (
+        <div>
+          <h3>Active Selection</h3>
+          <p>{activeProperty.address}</p>
+          {/* Add other details about the active property */}
+        </div>
       )}
 
       <h3>Contact History</h3>
