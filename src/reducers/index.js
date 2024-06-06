@@ -1,3 +1,4 @@
+// src/reducers/index.js
 import { combineReducers } from 'redux';
 import authReducer from './auth';
 import propertyReducer from './property';
@@ -8,3 +9,4 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
+

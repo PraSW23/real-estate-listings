@@ -1,10 +1,11 @@
-// src/pages/PropertyList.js
+//src/pages/Home.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProperties } from '../actions/propertyActions';
 import PropertyCard from '../components/PropertyCard';
+import PropertySearch from '../components/PropertySearch';
 
-const PropertyList = () => {
+const Home = () => {
   const dispatch = useDispatch();
   const { properties, loading } = useSelector(state => state.property);
 
@@ -18,7 +19,8 @@ const PropertyList = () => {
 
   return (
     <div>
-      <h1>Property List</h1>
+      <h1>Properties</h1>
+      <PropertySearch />
       <div>
         {properties.map(property => (
           <PropertyCard key={property._id} property={property} />
@@ -28,5 +30,4 @@ const PropertyList = () => {
   );
 };
 
-export default PropertyList;
-
+export default Home;

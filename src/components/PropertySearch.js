@@ -1,60 +1,29 @@
+//src/components/PropertySearch.js
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { getProperties } from '../actions/propertyActions';
 
-const PropertySearch = ({ onSearch, onClear }) => {
-  const [location, setLocation] = useState('');
-  const [priceRange, setPriceRange] = useState('');
-  const [isActive, setIsActive] = useState(false);
+const PropertySearch = () => {
+  const [query, setQuery] = useState('');
+  const dispatch = useDispatch();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // Pass the search criteria to the parent component
-    onSearch({ location, priceRange });
-    setIsActive(true);
-  };
-
-  const handleClear = () => {
-    setLocation('');
-    setPriceRange('');
-    setIsActive(false);
-    onClear();
+  const handleSearch = () => {
+    // Assuming the backend supports search query
+    dispatch(getProperties(query));
   };
 
   return (
     <div>
-      <h2>Property Search</h2>
-      <Form onSubmit={handleSearch}>
-        <Form.Group controlId="location">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            name="location"
-          />
-        </Form.Group>
-
-        <Form.Group controlId="priceRange">
-          <Form.Label>Price Range</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter price range"
-            value={priceRange}
-            onChange={(e) => setPriceRange(e.target.value)}
-            name="priceRange"
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit" disabled={isActive}>
-          Search
-        </Button>
-        <Button variant="secondary" type="button" onClick={handleClear} disabled={!isActive}>
-          Clear
-        </Button>
-      </Form>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search properties..."
+      />
+      <button onClick={handleSearch}>Search</button>
     </div>
   );
 };
 
 export default PropertySearch;
+

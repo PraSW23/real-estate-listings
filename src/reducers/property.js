@@ -1,41 +1,57 @@
-import axios from 'axios';
+// src/reducers/property.js
+import { 
+  GET_PROPERTIES, 
+  GET_PROPERTY, 
+  ADD_PROPERTY, 
+  UPDATE_PROPERTY, 
+  DELETE_PROPERTY 
+} from './ActionTypes';
 
-// Action Types
-const FETCH_PROPERTIES = 'FETCH_PROPERTIES';
-const SELECT_PROPERTY = 'SELECT_PROPERTY';
-
-// Action Creators
-export const fetchProperties = () => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/properties');
-      const properties = response.data;
-      dispatch({ type: FETCH_PROPERTIES, payload: properties });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-
-export const selectProperty = (property) => {
-  return { type: SELECT_PROPERTY, payload: property };
-};
-
-// Reducer
 const initialState = {
   properties: [],
-  activeProperty: null
+  property: null,
+  loading: true,
+  error: null,
 };
 
 const propertyReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_PROPERTIES:
-      return { ...state, properties: action.payload };
-    case SELECT_PROPERTY:
-      return { ...state, activeProperty: action.payload };
+    case GET_PROPERTIES:
+      return {
+        ...state,
+        properties: action.payload,
+        loading: false,
+      };
+    case GET_PROPERTY:
+      return {
+        ...state,
+        property: action.payload,
+        loading: false,
+      };
+    case ADD_PROPERTY:
+      return {
+        ...state,
+        properties: [...state.properties, action.payload],
+        loading: false,
+      };
+    case UPDATE_PROPERTY:
+      return {
+        ...state,
+        properties: state.properties.map(property =>
+          property._id === action.payload._id ? action.payload : property
+        ),
+        loading: false,
+      };
+    case DELETE_PROPERTY:
+      return {
+        ...state,
+        properties: state.properties.filter(property => property._id !== action.payload),
+        loading: false,
+      };
     default:
       return state;
   }
 };
 
 export default propertyReducer;
+

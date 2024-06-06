@@ -1,55 +1,39 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+//src/pages/UserDashboard.js
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProperties, deleteProperty } from '../actions/propertyActions';
+import { Link } from 'react-router-dom';
+import PropertyCard from '../components/PropertyCard';
 
 const UserDashboard = () => {
-  const savedProperties = useSelector((state) => state.auth.savedProperties);
-  const contactHistory = useSelector((state) => state.auth.contactHistory);
-  const [activeProperty, setActiveProperty] = useState(null);
+  const dispatch = useDispatch();
+  const { properties, loading } = useSelector(state => state.property);
 
-  const handlePropertyClick = (property) => {
-    setActiveProperty(property);
+  useEffect(() => {
+    dispatch(getProperties());
+  }, [dispatch]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteProperty(id));
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <h2>User Dashboard</h2>
-      <h3>Saved Properties</h3>
-      {savedProperties.length === 0 ? (
-        <p>No saved properties.</p>
-      ) : (
-        <ul>
-          {savedProperties.map((property) => (
-            <li
-              key={property.id}
-              onClick={() => handlePropertyClick(property)}
-              style={{ cursor: 'pointer', fontWeight: activeProperty === property ? 'bold' : 'normal' }}
-            >
-              {property.address}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {activeProperty && (
-        <div>
-          <h3>Active Selection</h3>
-          <p>{activeProperty.address}</p>
-          {/* Add other details about the active property */}
-        </div>
-      )}
-
-      <h3>Contact History</h3>
-      {contactHistory.length === 0 ? (
-        <p>No contact history.</p>
-      ) : (
-        <ul>
-          {contactHistory.map((contact) => (
-            <li key={contact.id}>
-              {contact.agentName}: {contact.message}
-            </li>
-          ))}
-        </ul>
-      )}
+      <h1>User Dashboard</h1>
+      <Link to="/add-property">Add Property</Link>
+      <div>
+        {properties.map(property => (
+          <PropertyCard 
+            key={property._id}
+            property={property}
+            handleDelete={handleDelete}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,56 +1,43 @@
-import React, { useState, useCallback } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
+// src/pages/Login.js
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '../actions/authActions';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
 
-  const handleLogin = useCallback(async (e) => {
+  const history = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const { email, password } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post('http://localhost:3000/api/login', { email, password });
-      // Handle the response or perform additional actions after successful login
-      console.log(response.data);
-    } catch (error) {
-      // Handle any errors that occur during login
-      console.error(error);
-    }
-  }, [email, password]);
+    await dispatch(login({ email, password }));
+    history('/');
+  };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <Form onSubmit={handleLogin}>
-        <Form.Group>
-          <label htmlFor="email">Email</label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <label htmlFor="password">Password</label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
-      </Form>
-    </div>
+    <form onSubmit={onSubmit}>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" value={email} onChange={onChange} required />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" name="password" value={password} onChange={onChange} required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
 };
 
 export default Login;
+

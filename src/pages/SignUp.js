@@ -1,56 +1,47 @@
+// src/pages/SignUp.js
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { register } from '../actions/authActions';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
-  const handleSignUp = async (e) => {
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  
+  const { name, email, password } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post('http://localhost:3000/api/signup', { email, password });
-      // Handle the response or perform additional actions after successful sign-up
-      console.log(response.data);
-    } catch (error) {
-      // Handle any errors that occur during sign-up
-      console.error(error);
-    }
+    await dispatch(register({ name, email, password }));
+    history('/');
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <Form onSubmit={handleSignUp}>
-        <Form.Group>
-          <label htmlFor="email">Email</label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <label htmlFor="password">Password</label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Sign Up
-        </Button>
-      </Form>
-    </div>
+    <form onSubmit={onSubmit}>
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" value={name} onChange={onChange} required />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" value={email} onChange={onChange} required />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" name="password" value={password} onChange={onChange} required />
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
   );
 };
 
 export default SignUp;
+

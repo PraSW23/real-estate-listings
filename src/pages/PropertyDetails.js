@@ -1,8 +1,9 @@
+//src/pages/PropertyDetails
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import ContactAgent from '../components/ContactAgent';
-import axios from 'axios';
+import axios from '../utils/axiosInstance';
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     const fetchPropertyDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/properties/${id}`);
+        const response = await axios.get(`/properties/${id}`);
         setProperty(response.data);
       } catch (error) {
         console.error(error);

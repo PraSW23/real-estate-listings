@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
-import { Card } from 'react-bootstrap';
+//src/components/PropertyCard.js
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const PropertyCard = ({ property, onPropertySelect }) => {
-  const [isActive, setIsActive] = useState(false);
-
-  const handleCardClick = () => {
-    setIsActive(!isActive);
-    onPropertySelect(property);
-  };
-
+const PropertyCard = ({ property, handleDelete }) => {
   return (
-    <Card
-      style={{ width: '18rem', cursor: 'pointer', border: isActive ? '2px solid blue' : 'none' }}
-      onClick={handleCardClick}
-    >
-      <Card.Img variant="top" src={property.image} />
-      <Card.Body>
-        <Card.Title>{property.address}</Card.Title>
-        <Card.Text>{property.price}</Card.Text>
-        {/* Add other property details */}
-      </Card.Body>
-    </Card>
+    <div>
+      <h2>{property.title}</h2>
+      <p>{property.description}</p>
+      <p>{property.price}</p>
+      <p>{property.location}</p>
+      <Link to={`/PropertyDetails/${property._id}`}>View Details</Link>
+      {handleDelete && <button onClick={() => handleDelete(property._id)}>Delete</button>}
+    </div>
   );
 };
 
 export default PropertyCard;
+

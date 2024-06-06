@@ -1,33 +1,50 @@
-// ...
-import { SAVE_PROPERTY, ADD_CONTACT_HISTORY } from './ActionTypes'; // Replace 'ActionTypes' with the actual file name
+// src/reducers/auth.js
+import { 
+  LOGIN_SUCCESS, 
+  LOGOUT_SUCCESS, 
+  REGISTER_SUCCESS, 
+  AUTH_ERROR,
+  USER_LOADED
+} from './ActionTypes';
 
-// Reducer
 const initialState = {
-    // ...
-    savedProperties: [],
-    contactHistory: [],
-  };
-  
-  const authReducer = (state = initialState, action) => {
-    switch (action.type) {
-      // ...
-  
-      case SAVE_PROPERTY:
-        return {
-          ...state,
-          savedProperties: [...state.savedProperties, action.payload],
-        };
-  
-      case ADD_CONTACT_HISTORY:
-        return {
-          ...state,
-          contactHistory: [...state.contactHistory, action.payload],
-        };
-  
-      default:
-        return state;
-    }
-  };
-  
-  export default authReducer;
-  
+  token: localStorage.getItem('token'),
+  isAuthenticated: null,
+  loading: true,
+  user: null,
+};
+
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+    case REGISTER_SUCCESS:
+      localStorage.setItem('token', action.payload.token);
+      return {
+        ...state,
+        ...action.payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case AUTH_ERROR:
+    case LOGOUT_SUCCESS:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
+      };
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export default authReducer;

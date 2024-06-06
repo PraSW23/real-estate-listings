@@ -1,54 +1,42 @@
+//src/components/ContactAgent.js
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
 
-const ContactAgent = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+const ContactAgent = ({ propertyId }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
 
-  const handleContact = async (e) => {
+  const { name, email, message } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post('http://localhost:3000/api/contact-agent', { email, message });
-      // Handle the response or perform additional actions after successful contact
-      console.log(response.data);
-    } catch (error) {
-      // Handle any errors that occur during contact
-      console.error(error);
-    }
+    // Handle contact agent form submission
+    console.log(`Contact agent for property ${propertyId}`, formData);
   };
 
   return (
-    <div>
-      <h2>Contact Agent</h2>
-      <Form onSubmit={handleContact}>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="message">
-          <Form.Label>Message</Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="Enter message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Send Message
-        </Button>
-      </Form>
-    </div>
+    <form onSubmit={onSubmit}>
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" value={name} onChange={onChange} required />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" value={email} onChange={onChange} required />
+      </div>
+      <div>
+        <label>Message</label>
+        <textarea name="message" value={message} onChange={onChange} required />
+      </div>
+      <button type="submit">Contact Agent</button>
+    </form>
   );
 };
 
 export default ContactAgent;
+
