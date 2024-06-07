@@ -1,7 +1,7 @@
-//src/pages/PropertyDetails
+// src/pages/PropertyDetails.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card } from 'react-bootstrap';
+import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box } from '@mui/material';
 import ContactAgent from '../components/ContactAgent';
 import axios from '../utils/axiosInstance';
 
@@ -23,26 +23,45 @@ const PropertyDetails = () => {
   }, [id]);
 
   if (!property) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h2>Property Details</h2>
-      <Card style={{ width: '18rem' }}>
+    <Container>
+      <Typography variant="h4" gutterBottom sx={{ margin: 2 }}>
+        Property Details
+      </Typography>
+      <Card>
         {property.images && property.images.map((image, index) => (
-          <Card.Img key={index} variant="top" src={image} />
+          <CardMedia
+            key={index}
+            component="img"
+            height="140"
+            image={image}
+            alt={`Property image ${index + 1}`}
+          />
         ))}
-        <Card.Body>
-          <Card.Title>{property.address}</Card.Title>
-          <Card.Text>{property.price}</Card.Text>
-          <Card.Text>{property.description}</Card.Text>
-          <Card.Text>{property.location}</Card.Text>
-          {/* Add other property details */}
-        </Card.Body>
+        <CardContent>
+          <Typography variant="h5">{property.address}</Typography>
+          <Typography variant="body1" color="textPrimary">
+            Price: {property.price}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" paragraph>
+            {property.description}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Location: {property.location}
+          </Typography>
+        </CardContent>
       </Card>
-      <ContactAgent />
-    </div>
+      <Box mt={4}>
+        <ContactAgent propertyId={property._id} />
+      </Box>
+    </Container>
   );
 };
 

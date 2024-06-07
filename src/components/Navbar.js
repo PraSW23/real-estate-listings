@@ -39,19 +39,23 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
-  const menuItems = [
+  const commonMenuItems = [
     { text: 'Home', path: '/' },
     { text: 'New Properties', path: '/NewProperties' },
     { text: 'Search Properties', path: '/SearchProperties' },
   ];
 
-  if (isAuthenticated) {
-    menuItems.push(
-      { text: 'My Properties', path: '/MyProperties' },
-      { text: 'Saved Properties', path: '/SavedProperties' },
-      { text: 'Profile', path: '/Profile' }
-    );
-  }
+  const authenticatedMenuItems = [
+    { text: 'My Properties', path: '/MyProperties' },
+    { text: 'Saved Properties', path: '/SavedProperties' },
+    { text: 'Profile', path: '/Profile' },
+    { text: 'Dashboard', path: '/UserDashboard' }
+  ];
+
+  const unauthenticatedMenuItems = [
+    { text: 'Sign Up', path: '/SignUp' },
+    { text: 'Login', path: '/Login' },
+  ];
 
   return (
     <div>
@@ -80,7 +84,7 @@ const Navbar = () => {
           style={{ width: 250 }}
         >
           <List>
-            {menuItems.map((item, index) => (
+            {commonMenuItems.map((item, index) => (
               <ListItem button component={Link} to={item.path} key={index}>
                 <ListItemText primary={item.text} />
               </ListItem>
@@ -88,21 +92,22 @@ const Navbar = () => {
             <Divider />
             {isAuthenticated ? (
               <>
-                <ListItem button component={Link} to="/UserDashboard">
-                  <ListItemText primary="Dashboard" />
-                </ListItem>
+                {authenticatedMenuItems.map((item, index) => (
+                  <ListItem button component={Link} to={item.path} key={index}>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ))}
                 <ListItem button onClick={handleLogout}>
                   <ListItemText primary="Logout" />
                 </ListItem>
               </>
             ) : (
               <>
-                <ListItem button component={Link} to="/SignUp">
-                  <ListItemText primary="Sign Up" />
-                </ListItem>
-                <ListItem button component={Link} to="/Login">
-                  <ListItemText primary="Login" />
-                </ListItem>
+                {unauthenticatedMenuItems.map((item, index) => (
+                  <ListItem button component={Link} to={item.path} key={index}>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ))}
               </>
             )}
           </List>
