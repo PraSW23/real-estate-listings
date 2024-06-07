@@ -21,7 +21,7 @@ const SignUp = () => {
   const onSubmit = async e => {
     e.preventDefault();
     await dispatch(register({ name, email, password }));
-    history('/');
+    history('/UserDashboard');
   };
 
   return (

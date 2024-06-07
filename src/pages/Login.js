@@ -21,7 +21,7 @@ const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     await dispatch(login({ email, password }));
-    history('/');
+    history('/UserDashboard');
   };
 
   return (

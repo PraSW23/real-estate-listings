@@ -1,18 +1,56 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-    background-color: #333;
-    color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #333;
+  color: #fff;
+  position: relative;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 1rem;
+}
+
+.hamburger {
+  cursor: pointer;
+  display: none;
+  font-size: 1.5rem;
+}
+
+.navbar-links {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+.navbar-links.open {
+  display: flex;
+  transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
   }
-  
-  .navbar a {
-    color: white;
-    text-decoration: none;
-    margin: 0 0.5rem;
-  }
-  
+
   .navbar-links {
     display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* Adjust based on your navbar height */
+    left: 0;
+    width: 200px; /* Adjust based on your preference */
+    background-color: #333;
+    transform: translateX(-100%);
   }
-  
+
+  .navbar-links a {
+    margin: 1rem 0;
+  }
+
+  .navbar-links.open {
+    transform: translateX(0);
+  }
+}
