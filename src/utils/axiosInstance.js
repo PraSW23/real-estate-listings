@@ -14,6 +14,7 @@ export const setAuthToken = token => {
   } else {
     delete axiosInstance.defaults.headers.common['x-auth-token'];
   }
+  
 };
 
 export default axiosInstance;

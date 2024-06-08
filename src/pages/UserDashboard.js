@@ -8,6 +8,7 @@ import PropertyCard from '../components/PropertyCard';
 const UserDashboard = () => {
   const dispatch = useDispatch();
   const { properties, loading } = useSelector(state => state.property);
+  const { user } = useSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(getProperties());
@@ -23,7 +24,7 @@ const UserDashboard = () => {
 
   return (
     <div>
-      <h1>User Dashboard</h1>
+      <h1>{user ? `${user.name}'s Dashboard` : 'User Dashboard'}</h1>
       <Link to="/add-property">Add Property</Link>
       <div>
         {properties.map(property => (

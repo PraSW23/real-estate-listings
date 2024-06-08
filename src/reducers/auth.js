@@ -4,7 +4,8 @@ import {
   LOGOUT_SUCCESS, 
   REGISTER_SUCCESS, 
   AUTH_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  USER_UPDATED,
 } from './ActionTypes';
 
 const initialState = {
@@ -41,6 +42,12 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
         loading: false,
         user: action.payload,
+      };
+      case USER_UPDATED:
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
       };
     default:
       return state;

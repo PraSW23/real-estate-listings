@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
 
 // Signup route
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, mobileNumber } = req.body;
 
   try {
     // Check if user already exists
@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
     if (user) return res.status(400).json({ message: 'User already exists' });
 
     // Create new user
-    user = new User({ name, email, password });
+    user = new User({ name, email, password, mobileNumber });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -70,6 +70,98 @@ router.get('/user', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to update user's favorite properties
+router.put('/user/favorite', auth, async (req, res) => {
+  const { propertyId } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.favoriteProperties.includes(propertyId)) {
+      // Remove propertyId if it exists
+      user.favoriteProperties = user.favoriteProperties.filter(id => id !== propertyId);
+    } else {
+      // Add propertyId if it doesn't exist
+      user.favoriteProperties.push(propertyId);
+    }
+
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to update user's mobile number
+router.put('/user/mobile', auth, async (req, res) => {
+  const { mobileNumber } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.mobileNumber = mobileNumber;
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to update the count of properties viewed by the user
+router.put('/user/properties-viewed', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.propertiesViewedCount += 1;
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Route to handle like icon click on property card
+router.put('/user/like-property', auth, async (req, res) => {
+  const { propertyId } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.favoriteProperties.includes(propertyId)) {
+      // Remove propertyId if it exists
+      user.favoriteProperties = user.favoriteProperties.filter(id => id !== propertyId);
+    } else {
+      // Add propertyId if it doesn't exist
+      user.favoriteProperties.push(propertyId);
+    }
+
+    await user.save();
+
     res.json(user);
   } catch (err) {
     console.error(err.message);
