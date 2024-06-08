@@ -25,7 +25,7 @@ export const getProperties = () => async dispatch => {
 
 export const getProperty = id => async dispatch => {
   try {
-    const res = await axiosInstance.get('/properties/${id}');
+    const res = await axiosInstance.get(`/properties/${id}`);
     dispatch({
       type: GET_PROPERTY,
       payload: res.data
@@ -49,7 +49,7 @@ export const addProperty = property => async dispatch => {
 
 export const updateProperty = (id, property) => async dispatch => {
   try {
-    const res = await axiosInstance.put('/properties/${id}', property);
+    const res = await axiosInstance.put(`/properties/${id}`, property);
     dispatch({
       type: UPDATE_PROPERTY,
       payload: res.data
@@ -61,7 +61,7 @@ export const updateProperty = (id, property) => async dispatch => {
 
 export const deleteProperty = id => async dispatch => {
   try {
-    await axiosInstance.delete('/properties/${id}');
+    await axiosInstance.delete(`/properties/${id}`);
     dispatch({
       type: DELETE_PROPERTY,
       payload: id

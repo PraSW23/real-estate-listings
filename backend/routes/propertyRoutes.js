@@ -2,6 +2,7 @@
 const express = require('express');
 const Property = require('../models/Property');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 // Get all properties
 router.get('/', async (req, res) => {
@@ -9,9 +10,8 @@ router.get('/', async (req, res) => {
         const properties = await Property.find();
         res.json(properties);
     } catch (error) {
-    	 console.error('Error fetching properties:', error);
-    	 res.status(500).json({ message: 'Server error' });
-        res.status(500).json({ message: error.message });
+        console.error('Error fetching properties:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
@@ -23,17 +23,6 @@ router.get('/:id', async (req, res) => {
         res.json(property);
     } catch (error) {
         res.status(500).json({ message: error.message });
-    }
-});
-
-// Add a new property
-router.post('/', async (req, res) => {
-    const property = new Property(req.body);
-    try {
-        const savedProperty = await property.save();
-        res.status(201).json(savedProperty);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
     }
 });
 
@@ -70,5 +59,39 @@ router.post('/getPropertiesByIds', async (req, res) => {
     }
 });
 
-module.exports = router;
+router.get('/user/:id', async (req, res) => {
+    try {
+        const properties = await Property.find({ user: req.params.id });
+        res.json(properties);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
+// Route to add a new property
+router.post('/', auth, async (req, res) => {
+    console.log('Add property route hit');
+    //const { title, description, price, location } = req.body; // Changed 'address' to 'location'
+    //console.log(req.body);
+    try {
+        console.log('Request Headers:', req.headers); // Log headers
+        console.log('Request Body:', req.body); // Log body
+
+        const { image, title, description, price, location } = req.body;
+
+        const newProperty = new Property({
+            image,
+            title,
+            description,
+            price,
+            location,
+            user: req.user.id,
+        });
+        const savedProperty = await newProperty.save();
+        res.json(savedProperty);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+module.exports = router;

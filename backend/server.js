@@ -12,14 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/properties', propertyRoutes);
-app.use('/api/auth', authRoutes);
-
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
+
+
+// Routes
+app.use('/api/properties', propertyRoutes);
+app.use('/api/auth', authRoutes);
+
+app.get('/', (req, res) => res.send('API Running'));
 
 // Start server
 const PORT = process.env.PORT || 5000;
