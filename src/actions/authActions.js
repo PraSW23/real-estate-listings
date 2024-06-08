@@ -89,6 +89,22 @@ export const logout = () => dispatch => {
   setAuthToken(null); // Remove token from axios instance
 };
 
+// Update user's favorite properties
+export const updateFavoriteProperties = (propertyId) => async dispatch => {
+  try {
+    const res = await axiosInstance.put('/auth/user/favorite', { propertyId });
+    dispatch({
+      type: USER_UPDATED,
+      payload: res.data
+    });
+    dispatch(loadUser()); // Refresh user data
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
+  }
+};
+
 // Cookie handling functions
 
 export const setCookie = (name, value, days) => {

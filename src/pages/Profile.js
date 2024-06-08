@@ -35,6 +35,7 @@ const UserProfile = () => {
     name: '',
     email: '',
     bio: '',
+    mobileNumber: '', // Add mobileNumber to the formData state
   });
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const UserProfile = () => {
         name: user.name,
         email: user.email,
         bio: user.bio || '',
+        mobileNumber: user.mobileNumber || '', // Initialize mobileNumber
       });
     }
   }, [user, dispatch]);
@@ -100,6 +102,15 @@ const UserProfile = () => {
                   value={formData.email}
                   onChange={handleChange}
                   disabled
+                />
+                <TextField
+                  fullWidth
+                  label="Mobile Number"
+                  name="mobileNumber"
+                  variant="outlined"
+                  margin="normal"
+                  value={formData.mobileNumber}
+                  onChange={handleChange}
                 />
                 <TextField
                   fullWidth

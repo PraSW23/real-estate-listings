@@ -11,6 +11,7 @@ import UserDashboard from './pages/UserDashboard';
 import { loadUser } from './actions/authActions';
 import { useDispatch } from 'react-redux';
 import UserProfile from './pages/Profile';
+import SavedProperties from './pages/SavedProperties';
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/PropertyDetails/:id" element={<PropertyDetails />} />
         <Route path="/UserDashboard" element={<UserDashboard />} />
         <Route path="/Profile" element={<UserProfile />} />
+        <Route path="/SavedProperties" element={<SavedProperties />} />
       </Routes>
     </Router>
   );

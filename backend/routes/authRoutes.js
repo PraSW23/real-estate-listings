@@ -87,16 +87,16 @@ router.put('/user/favorite', auth, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Toggle favorite property
     if (user.favoriteProperties.includes(propertyId)) {
       // Remove propertyId if it exists
-      user.favoriteProperties = user.favoriteProperties.filter(id => id !== propertyId);
+      user.favoriteProperties = user.favoriteProperties.filter(id => id.toString() !== propertyId.toString());
     } else {
       // Add propertyId if it doesn't exist
       user.favoriteProperties.push(propertyId);
     }
 
     await user.save();
-
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -143,7 +143,8 @@ router.put('/user/properties-viewed', auth, async (req, res) => {
 });
 
 // Route to handle like icon click on property card
-router.put('/user/like-property', auth, async (req, res) => {
+// Route to update user's favorite properties
+router.put('/user/favorite', auth, async (req, res) => {
   const { propertyId } = req.body;
 
   try {
@@ -154,14 +155,13 @@ router.put('/user/like-property', auth, async (req, res) => {
 
     if (user.favoriteProperties.includes(propertyId)) {
       // Remove propertyId if it exists
-      user.favoriteProperties = user.favoriteProperties.filter(id => id !== propertyId);
+      user.favoriteProperties = user.favoriteProperties.filter(id => id.toString() !== propertyId);
     } else {
       // Add propertyId if it doesn't exist
       user.favoriteProperties.push(propertyId);
     }
 
     await user.save();
-
     res.json(user);
   } catch (err) {
     console.error(err.message);

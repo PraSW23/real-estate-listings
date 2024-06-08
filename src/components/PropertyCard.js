@@ -1,9 +1,11 @@
 // src/components/PropertyCard.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { styled } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFavoriteProperties } from '../actions/authActions';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   maxWidth: 345,
@@ -15,11 +17,20 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const PropertyCard = ({ property, handleDelete }) => {
+const PropertyCard = ({ property }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    if (user && user.favoriteProperties && user.favoriteProperties.includes(property._id)) {
+      setIsFavorite(true);
+    }
+  }, [user, property._id]);
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
+    dispatch(updateFavoriteProperties(property._id)); // Dispatch action to update favorites
   };
 
   return (

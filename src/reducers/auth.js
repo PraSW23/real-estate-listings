@@ -12,7 +12,10 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
-  user: null,
+  user: {
+    favoriteProperties: [],
+    userProperties: [],
+  }
 };
 
 const authReducer = (state = initialState, action) => {
@@ -34,7 +37,10 @@ const authReducer = (state = initialState, action) => {
         token: null,
         isAuthenticated: false,
         loading: false,
-        user: null,
+        user: {
+          favoriteProperties: [],
+          userProperties: [],
+        }
       };
     case USER_LOADED:
       return {
