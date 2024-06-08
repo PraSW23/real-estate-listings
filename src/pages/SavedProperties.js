@@ -1,12 +1,41 @@
 // src/pages/SavedProperties.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Container, Box, Typography, Grid } from '@mui/material';
+import { Container, Box, Typography, Grid, CircularProgress } from '@mui/material';
 import PropertyCard from '../components/PropertyCard';
+import axios from '../utils/axiosInstance';
 
 const SavedProperties = () => {
-  const favoriteProperties = useSelector(state => state.auth.user.favoriteProperties);
+  const favoritePropertyIds = useSelector(state => state.auth.user.favoriteProperties);
+  const [favoriteProperties, setFavoriteProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFavoriteProperties = async () => {
+      try {
+        const response = await axios.post('/properties/getPropertiesByIds', { propertyIds: favoritePropertyIds });
+        setFavoriteProperties(response.data);
+      } catch (error) {
+        console.error('Error fetching favorite properties:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (favoritePropertyIds && favoritePropertyIds.length > 0) {
+      fetchFavoriteProperties();
+    } else {
+      setLoading(false);
+    }
+  }, [favoritePropertyIds]);
+
+  if (loading) {
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -20,7 +49,7 @@ const SavedProperties = () => {
           <Grid container spacing={4}>
             {favoriteProperties.map((property) => (
               <Grid item xs={12} sm={6} md={4} key={property._id}>
-                {property && <PropertyCard property={property} />}
+                <PropertyCard property={property} />
               </Grid>
             ))}
           </Grid>

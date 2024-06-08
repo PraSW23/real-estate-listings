@@ -59,5 +59,16 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Get properties by IDs
+router.post('/getPropertiesByIds', async (req, res) => {
+    const { propertyIds } = req.body;
+    try {
+        const properties = await Property.find({ _id: { $in: propertyIds } });
+        res.json(properties);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;
 
