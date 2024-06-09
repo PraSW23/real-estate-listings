@@ -29,6 +29,13 @@ const ScrollableCardContent = styled(CardContent)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
+const AnimatedIconButton = styled(IconButton)({
+  transition: 'transform 0.3s',
+  '&:hover': {
+    transform: 'scale(1.2)',
+  },
+});
+
 const PropertyCard = ({ property, onDelete }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
@@ -106,9 +113,9 @@ const PropertyCard = ({ property, onDelete }) => {
           <MenuItem onClick={handleClose}>Share via Email</MenuItem>
           <MenuItem onClick={handleClose}>Share via Social Media</MenuItem>
         </Menu>
-        <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
+        <AnimatedIconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
           <FavoriteIcon color={isFavorite ? 'secondary' : 'action'} />
-        </IconButton>
+        </AnimatedIconButton>
         {user && property.user && user._id === property.user._id && (
           <>
             <IconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>

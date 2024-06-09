@@ -3,6 +3,7 @@ const express = require('express');
 const Property = require('../models/Property');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const User = require('../models/User');
 
 // Get all properties
 router.get('/', async (req, res) => {
@@ -59,9 +60,10 @@ router.post('/getPropertiesByIds', async (req, res) => {
     }
 });
 
+// Get user properties
 router.get('/user/:id', async (req, res) => {
     try {
-        const properties = await Property.find({ user: req.params.id });
+        const properties = await Property.find({ user: req.params.id }).populate('user', 'name');
         res.json(properties);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });

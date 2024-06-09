@@ -1,13 +1,28 @@
 // src/pages/PropertyDetails.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box, Grid } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box, Grid, IconButton } from '@mui/material';
 import ContactAgent from '../components/ContactAgent';
 import axios from '../utils/axiosInstance';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFavoriteProperties } from '../actions/authActions';
+import { styled } from '@mui/system';
+
+const AnimatedIconButton = styled(IconButton)({
+  transition: 'transform 0.3s',
+  '&:hover': {
+    transform: 'scale(1.2)',
+  },
+});
 
 const PropertyDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -21,6 +36,20 @@ const PropertyDetails = () => {
 
     fetchPropertyDetails();
   }, [id]);
+
+  const handleLikeClick = () => {
+    if (!user || !user._id) {
+      // Redirect to signup/login page if user is not authenticated
+      navigate('/signup');
+      return;
+    }
+    const propertyId = property._id;
+    dispatch(updateFavoriteProperties(propertyId)); // Dispatch action to update favorites
+    setProperty(prevProperty => ({
+      ...prevProperty,
+      isLiked: !prevProperty.isLiked
+    }));
+  };
 
   if (!property) {
     return (
@@ -38,7 +67,7 @@ const PropertyDetails = () => {
       <Card sx={{ mb: 4 }}>
         <CardMedia
           component="img"
-          height="300"
+          height="500"
           image={property.image || 'https://via.placeholder.com/150'}
           alt="Property image"
         />
@@ -57,6 +86,11 @@ const PropertyDetails = () => {
             Listed on: {new Date(property.date).toLocaleDateString()}
           </Typography>
         </CardContent>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 2, marginRight: 2 }}>
+          <AnimatedIconButton onClick={handleLikeClick}>
+            {property.isLiked ? <FavoriteIcon sx={{ fontSize: 60 }} color="secondary" /> : <FavoriteBorderIcon sx={{ fontSize: 60 }} />}
+          </AnimatedIconButton>
+        </Box>
       </Card>
       <Box mt={4}>
         <ContactAgent propertyId={property._id} />

@@ -91,7 +91,6 @@ const AddProperty = () => {
             name="image" 
             value={formData.image} 
             onChange={handleChange} 
-            required
           />
           <CardMedia
             component="img"

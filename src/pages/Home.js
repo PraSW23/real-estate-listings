@@ -1,7 +1,7 @@
 // src/pages/Home.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProperties } from '../actions/propertyActions';
+import { getProperties, deleteProperty } from '../actions/propertyActions'; // Import deleteProperty action
 import PropertyCard from '../components/PropertyCard';
 import PropertySearch from '../components/PropertySearch';
 import { CircularProgress, Container, Typography, Grid, Box } from '@mui/material';
@@ -22,6 +22,10 @@ const Home = () => {
     dispatch(getProperties());
   }, [dispatch]);
 
+  const handleDelete = (propertyId) => { // Define handleDelete function
+    dispatch(deleteProperty(propertyId));
+  };
+
   if (loading) {
     return (
       <Container>
@@ -41,7 +45,7 @@ const Home = () => {
       <Grid container spacing={3}>
         {properties.map(property => (
           <Grid item xs={12} sm={6} md={4} key={property._id}>
-            <PropertyCard property={property} />
+            <PropertyCard property={property} onDelete={handleDelete} /> {/* Pass onDelete function */}
           </Grid>
         ))}
       </Grid>
