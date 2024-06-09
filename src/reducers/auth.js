@@ -14,7 +14,6 @@ const initialState = {
   loading: true,
   user: {
     favoriteProperties: [],
-    userProperties: [],
   }
 };
 
@@ -39,7 +38,6 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         user: {
           favoriteProperties: [],
-          userProperties: [],
         }
       };
     case USER_LOADED:

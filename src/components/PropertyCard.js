@@ -8,7 +8,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
-import axios from '../utils/axiosInstance';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   maxWidth: 345,
@@ -37,13 +36,8 @@ const PropertyCard = ({ property, onDelete }) => {
     dispatch(updateFavoriteProperties(property._id)); // Dispatch action to update favorites
   };
 
-  const handleDeleteClick = async () => {
-    try {
-      await axios.delete(`/properties/${property._id}`);
-      onDelete(property._id);
-    } catch (error) {
-      console.error('Error deleting property:', error);
-    }
+  const handleDeleteClick = () => {
+    onDelete(property._id); // Call the parent component's delete handler
   };
 
   return (

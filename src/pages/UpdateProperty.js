@@ -10,7 +10,7 @@ const UpdateProperty = () => {
     title: '',
     description: '',
     price: '',
-    address: '',
+    location: '',
   });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -93,9 +93,9 @@ const UpdateProperty = () => {
           <TextField
             fullWidth
             margin="normal"
-            label="Address"
-            name="address"
-            value={formData.address}
+            label="location"
+            name="location"
+            value={formData.location}
             onChange={handleChange}
             required
           />

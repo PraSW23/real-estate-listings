@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Container, Box, Typography, Grid, Button, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropertyCard from '../components/PropertyCard';
 import axios from '../utils/axiosInstance';
 
@@ -10,10 +10,13 @@ const MyProperties = () => {
   const user = useSelector(state => state.auth.user);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProperties = async () => {
+      if (!user || !user._id) {
+        return;
+      }
+
       try {
         const response = await axios.get(`/properties/user/${user._id}`);
         setProperties(response.data);
@@ -24,9 +27,7 @@ const MyProperties = () => {
       }
     };
 
-    if (user) {
-      fetchUserProperties();
-    }
+    fetchUserProperties();
   }, [user]);
 
   const handleDelete = async (propertyId) => {
