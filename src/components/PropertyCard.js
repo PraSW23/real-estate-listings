@@ -1,11 +1,14 @@
 // src/components/PropertyCard.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
+import axios from '../utils/axiosInstance';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   maxWidth: 345,
@@ -17,10 +20,11 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, onDelete }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user && user.favoriteProperties && user.favoriteProperties.includes(property._id)) {
@@ -31,6 +35,15 @@ const PropertyCard = ({ property }) => {
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
     dispatch(updateFavoriteProperties(property._id)); // Dispatch action to update favorites
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await axios.delete(`/properties/${property._id}`);
+      onDelete(property._id);
+    } catch (error) {
+      console.error('Error deleting property:', error);
+    }
   };
 
   return (
@@ -63,6 +76,16 @@ const PropertyCard = ({ property }) => {
         <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
           <FavoriteIcon color={isFavorite ? 'secondary' : 'action'} />
         </IconButton>
+        {user && user._id === property.user && (
+          <>
+            <IconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton color="secondary" onClick={handleDeleteClick}>
+              <DeleteIcon />
+            </IconButton>
+          </>
+        )}
       </CardActions>
     </StyledCard>
   );

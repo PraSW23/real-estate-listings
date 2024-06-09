@@ -24,7 +24,7 @@ const UserDashboard = () => {
 
   return (
     <div>
-      <h1>{user ? `${user.name}'s Dashboard` : 'User Dashboard'}</h1>
+      <h1>{user ? `Hi ${user.name} !` : 'User Dashboard'}</h1>
       <Link to="/add-property">Add Property</Link>
       <div>
         {properties.map(property => (

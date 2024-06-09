@@ -1,10 +1,8 @@
 // src/pages/MyProperties.js
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Container, Box, Typography, Grid, Button, IconButton, CircularProgress } from '@mui/material';
+import { Container, Box, Typography, Grid, Button, CircularProgress } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import PropertyCard from '../components/PropertyCard';
 import axios from '../utils/axiosInstance';
 
@@ -63,14 +61,7 @@ const MyProperties = () => {
           ) : (
             properties.map((property) => (
               <Grid item xs={12} sm={6} md={4} key={property._id}>
-                <PropertyCard property={property}>
-                  <IconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton color="secondary" onClick={() => handleDelete(property._id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </PropertyCard>
+                <PropertyCard property={property} onDelete={handleDelete} />
               </Grid>
             ))
           )}
