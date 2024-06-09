@@ -1,8 +1,8 @@
 // src/pages/UpdateProperty.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, TextField, Button, CircularProgress } from '@mui/material';
-import axios from '../utils/axiosInstance';
+import { Container, Box, Typography, TextField, Button, CircularProgress, CardMedia } from '@mui/material';
+import axiosInstance from '../utils/axiosInstance';
 
 const UpdateProperty = () => {
   const { id } = useParams();
@@ -11,6 +11,7 @@ const UpdateProperty = () => {
     description: '',
     price: '',
     location: '',
+    image: '',
   });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const UpdateProperty = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const response = await axios.get(`/properties/${id}`);
+        const response = await axiosInstance.get(`/properties/${id}`);
         setFormData(response.data);
       } catch (error) {
         console.error('Error fetching property:', error);
@@ -40,11 +41,15 @@ const UpdateProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/properties/${id}`, formData);
+      await axiosInstance.put(`/properties/${id}`, formData);
       navigate('/MyProperties');
     } catch (error) {
       console.error('Error updating property:', error);
     }
+  };
+
+  const handleCancel = () => {
+    navigate('/MyProperties');
   };
 
   if (loading) {
@@ -93,14 +98,33 @@ const UpdateProperty = () => {
           <TextField
             fullWidth
             margin="normal"
-            label="location"
+            label="Location"
             name="location"
             value={formData.location}
             onChange={handleChange}
             required
           />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Image URL" 
+            name="image" 
+            value={formData.image} 
+            onChange={handleChange} 
+            required
+          />
+          <CardMedia
+            component="img"
+            alt="Property Image"
+            height="140"
+            image={formData.image || 'https://via.placeholder.com/150'}
+            style={{ maxWidth: '100%', height: 'auto', margin: '10px 0' }}
+          />
           <Button type="submit" variant="contained" color="primary">
             Update Property
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleCancel} style={{ marginLeft: '10px' }}>
+            Cancel
           </Button>
         </form>
       </Box>

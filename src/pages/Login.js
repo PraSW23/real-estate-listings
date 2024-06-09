@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../actions/authActions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 
 const Login = () => {
@@ -26,8 +26,8 @@ const Login = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box component="form" onSubmit={onSubmit} sx={{ mt: 8 }}>
-        <Typography variant="h4" gutterBottom>
+      <Box component="form" onSubmit={onSubmit} sx={{ mt: 8, backgroundColor: '#f9f9f9', padding: '30px', borderRadius: '10px', boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}>
+        <Typography variant="h4" gutterBottom style={{ marginBottom: '20px', textAlign: 'center', color: '#333' }}>
           Login
         </Typography>
         <TextField
@@ -38,6 +38,7 @@ const Login = () => {
           onChange={onChange}
           margin="normal"
           required
+          sx={{ marginBottom: '20px' }}
         />
         <TextField
           fullWidth
@@ -48,16 +49,20 @@ const Login = () => {
           onChange={onChange}
           margin="normal"
           required
+          sx={{ marginBottom: '20px' }}
         />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          sx={{ mt: 3 }}
+          sx={{ marginBottom: '20px' }}
         >
           Login
         </Button>
+        <Typography variant="body2" style={{ textAlign: 'center' }}>
+          New User? <Link to="/signup" style={{ color: '#ff4081', textDecoration: 'none' }}>Sign Up</Link>
+        </Typography>
       </Box>
     </Container>
   );

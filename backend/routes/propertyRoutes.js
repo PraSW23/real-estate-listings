@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 // Get all properties
 router.get('/', async (req, res) => {
     try {
-        const properties = await Property.find();
+        const properties = await Property.find().populate('user', 'name');
         res.json(properties);
     } catch (error) {
         console.error('Error fetching properties:', error);
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 // Get a single property by ID
 router.get('/:id', async (req, res) => {
     try {
-        const property = await Property.findById(req.params.id);
+        const property = await Property.findById(req.params.id).populate('user','name');
         if (!property) return res.status(404).json({ message: 'Property not found' });
         res.json(property);
     } catch (error) {

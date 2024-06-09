@@ -1,7 +1,7 @@
 // src/pages/PropertyDetails.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box } from '@mui/material';
+import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box, Grid } from '@mui/material';
 import ContactAgent from '../components/ContactAgent';
 import axios from '../utils/axiosInstance';
 
@@ -35,26 +35,26 @@ const PropertyDetails = () => {
       <Typography variant="h4" gutterBottom sx={{ margin: 2 }}>
         Property Details
       </Typography>
-      <Card>
-        {property.images && property.images.map((image, index) => (
-          <CardMedia
-            key={index}
-            component="img"
-            height="140"
-            image={image}
-            alt={`Property image ${index + 1}`}
-          />
-        ))}
+      <Card sx={{ mb: 4 }}>
+        <CardMedia
+          component="img"
+          height="300"
+          image={property.image || 'https://via.placeholder.com/150'}
+          alt="Property image"
+        />
         <CardContent>
-          <Typography variant="h5">{property.address}</Typography>
-          <Typography variant="body1" color="textPrimary">
-            Price: {property.price}
+          <Typography variant="h5" gutterBottom>{property.title}</Typography>
+          <Typography variant="body1" color="textPrimary" gutterBottom>
+            Price: Rs.{property.price}
           </Typography>
           <Typography variant="body2" color="textSecondary" paragraph>
             {property.description}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" color="textSecondary" gutterBottom>
             Location: {property.location}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Listed on: {new Date(property.date).toLocaleDateString()}
           </Typography>
         </CardContent>
       </Card>

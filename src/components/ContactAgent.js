@@ -1,6 +1,6 @@
 // src/components/ContactAgent.js
 import React, { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, Typography } from '@mui/material';
 
 const ContactAgent = ({ propertyId }) => {
   const [formData, setFormData] = useState({
@@ -22,6 +22,9 @@ const ContactAgent = ({ propertyId }) => {
 
   return (
     <Box component="form" onSubmit={onSubmit} noValidate autoComplete="off" sx={{ mt: 3 }}>
+      <Typography variant="h5" gutterBottom>
+        Contact Agent
+      </Typography>
       <TextField
         variant="outlined"
         margin="normal"
@@ -32,6 +35,7 @@ const ContactAgent = ({ propertyId }) => {
         name="name"
         value={name}
         onChange={onChange}
+        sx={{ mb: 2 }}
       />
       <TextField
         variant="outlined"
@@ -43,6 +47,7 @@ const ContactAgent = ({ propertyId }) => {
         name="email"
         value={email}
         onChange={onChange}
+        sx={{ mb: 2 }}
       />
       <TextField
         variant="outlined"
@@ -56,6 +61,7 @@ const ContactAgent = ({ propertyId }) => {
         rows={4}
         value={message}
         onChange={onChange}
+        sx={{ mb: 2 }}
       />
       <Button type="submit" fullWidth variant="contained" color="primary">
         Contact Agent

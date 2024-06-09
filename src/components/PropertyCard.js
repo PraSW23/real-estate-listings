@@ -1,10 +1,11 @@
 // src/components/PropertyCard.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box, Menu, MenuItem } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ShareIcon from '@mui/icons-material/Share';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
@@ -17,12 +18,22 @@ const StyledCard = styled(Card)(({ theme }) => ({
   '&:hover': {
     transform: 'scale(1.05)',
   },
+  display: 'flex',
+  flexDirection: 'column',
+}));
+
+const ScrollableCardContent = styled(CardContent)(({ theme }) => ({
+  flex: '1 1 auto',
+  overflowY: 'auto',
+  maxHeight: 100, // Set a maximum height for the content area
+  padding: theme.spacing(2),
 }));
 
 const PropertyCard = ({ property, onDelete }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +43,10 @@ const PropertyCard = ({ property, onDelete }) => {
   }, [user, property._id]);
 
   const handleFavoriteClick = () => {
+    if (!user || !user._id) {
+      navigate('/signup');
+      return;
+    }
     setIsFavorite(!isFavorite);
     dispatch(updateFavoriteProperties(property._id)); // Dispatch action to update favorites
   };
@@ -40,15 +55,23 @@ const PropertyCard = ({ property, onDelete }) => {
     onDelete(property._id); // Call the parent component's delete handler
   };
 
+  const handleShareClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <StyledCard>
       <CardMedia
         component="img"
-        height="140"
+        height="170"
         image={property.image || 'https://via.placeholder.com/140'}
         alt={property.title}
       />
-      <CardContent>
+      <ScrollableCardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {property.title}
         </Typography>
@@ -56,21 +79,37 @@ const PropertyCard = ({ property, onDelete }) => {
           {property.description}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          Price: {property.price}
+          Price: Rs.{property.price}/-
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           Location: {property.location}
         </Typography>
-      </CardContent>
+        {property.user && (
+          <Typography variant="body2" color="textSecondary" component="p">
+            Owner: {property.user.name}
+          </Typography>
+        )}
+      </ScrollableCardContent>
       <CardActions>
         <Button size="small" component={Link} to={`/PropertyDetails/${property._id}`}>
           View Details
         </Button>
         <Box sx={{ flexGrow: 1 }} />
+        <IconButton aria-label="share" onClick={handleShareClick}>
+          <ShareIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>Share via Email</MenuItem>
+          <MenuItem onClick={handleClose}>Share via Social Media</MenuItem>
+        </Menu>
         <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
           <FavoriteIcon color={isFavorite ? 'secondary' : 'action'} />
         </IconButton>
-        {user && user._id === property.user && (
+        {user && property.user && user._id === property.user._id && (
           <>
             <IconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>
               <EditIcon />

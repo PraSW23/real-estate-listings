@@ -1,7 +1,7 @@
 // src/pages/AddProperty.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, TextField, Button } from '@mui/material';
+import { Container, Box, Typography, TextField, Button, CardMedia } from '@mui/material';
 import axiosInstance from '../utils/axiosInstance'; // Changed import
 
 const AddProperty = () => {
@@ -83,6 +83,22 @@ const AddProperty = () => {
             value={formData.location} 
             onChange={handleChange} 
             required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Image URL" 
+            name="image" 
+            value={formData.image} 
+            onChange={handleChange} 
+            required
+          />
+          <CardMedia
+            component="img"
+            alt="Property Image"
+            height="140"
+            image={formData.image || 'https://via.placeholder.com/150'}
+            style={{ maxWidth: '100%', height: 'auto', margin: '10px 0' }}
           />
           <Button type="submit" variant="contained" color="primary">
             Add Property
