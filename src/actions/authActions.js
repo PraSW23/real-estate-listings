@@ -14,20 +14,24 @@ export const loadUser = () => async dispatch => {
   const token = getCookie('token'); // Retrieve token from cookie
   if (token) {
     setAuthToken(token);
-  }
-
-  try {
-    const res = await axiosInstance.get('/auth/user');
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data
-    });
-  } catch (err) {
+    try {
+      const res = await axiosInstance.get('/auth/user');
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: AUTH_ERROR
+      });
+    }
+  } else {
     dispatch({
       type: AUTH_ERROR
     });
   }
 };
+
 // Login user
 export const login = credentials => async dispatch => {
   try {
