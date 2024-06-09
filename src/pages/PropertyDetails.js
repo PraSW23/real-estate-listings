@@ -85,6 +85,11 @@ const PropertyDetails = () => {
           <Typography variant="body2" color="textSecondary">
             Listed on: {new Date(property.date).toLocaleDateString()}
           </Typography>
+          {property.user && (
+            <Typography variant="body2" color="textSecondary" gutterBottom>
+              <strong>Owner: {property.user.name}</strong>
+            </Typography>
+          )}
         </CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 2, marginRight: 2 }}>
           <AnimatedIconButton onClick={handleLikeClick}>

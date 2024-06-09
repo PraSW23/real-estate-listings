@@ -32,6 +32,13 @@ const ScrollableCardContent = styled(CardContent)(({ theme }) => ({
 const AnimatedIconButton = styled(IconButton)({
   transition: 'transform 0.3s',
   '&:hover': {
+    transform: 'scale(1.7)',
+  },
+});
+
+const AnimatedMenuIcon = styled(IconButton)({
+  transition: 'transform 0.3s',
+  '&:hover': {
     transform: 'scale(1.2)',
   },
 });
@@ -102,9 +109,9 @@ const PropertyCard = ({ property, onDelete }) => {
           View Details
         </Button>
         <Box sx={{ flexGrow: 1 }} />
-        <IconButton aria-label="share" onClick={handleShareClick}>
+        <AnimatedMenuIcon aria-label="share" onClick={handleShareClick}>
           <ShareIcon />
-        </IconButton>
+        </AnimatedMenuIcon>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -118,12 +125,12 @@ const PropertyCard = ({ property, onDelete }) => {
         </AnimatedIconButton>
         {user && property.user && user._id === property.user._id && (
           <>
-            <IconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>
+            <AnimatedIconButton color="primary" onClick={() => navigate(`/UpdateProperty/${property._id}`)}>
               <EditIcon />
-            </IconButton>
-            <IconButton color="secondary" onClick={handleDeleteClick}>
+            </AnimatedIconButton>
+            <AnimatedIconButton color="secondary" onClick={handleDeleteClick}>
               <DeleteIcon />
-            </IconButton>
+            </AnimatedIconButton>
           </>
         )}
       </CardActions>
