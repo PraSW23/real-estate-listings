@@ -43,7 +43,7 @@ const Home = () => {
         <PropertySearch />
       </Box>
       <Grid container spacing={3}>
-        {Array.isArray(properties) && properties.length > 0 ? (
+        {properties.length > 0 ? (
           properties.map(property => (
             <Grid item xs={12} sm={6} md={4} key={property._id}>
               <PropertyCard property={property} onDelete={handleDelete} /> {/* Pass onDelete function */}
