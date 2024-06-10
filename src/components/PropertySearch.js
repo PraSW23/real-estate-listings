@@ -9,17 +9,17 @@ const PropertySearch = () => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  const debouncedSearch = useCallback(
-    debounce((searchQuery) => {
-      dispatch(getProperties({ query: searchQuery }));
+  const handleSearch = useCallback(
+    debounce((value) => {
+      dispatch(getProperties({ query: value }));
     }, 500),
     [dispatch]
   );
 
-  const handleSearch = (e) => {
+  const handleChange = (e) => {
     const { value } = e.target;
     setQuery(value);
-    debouncedSearch(value);
+    handleSearch(value);
   };
 
   return (
@@ -27,7 +27,7 @@ const PropertySearch = () => {
       <TextField
         variant="outlined"
         value={query}
-        onChange={handleSearch}
+        onChange={handleChange}
         placeholder="Search properties..."
         fullWidth
         sx={{ marginRight: 2 }}
