@@ -37,4 +37,3 @@ const PropertySearch = () => {
 };
 
 export default PropertySearch;
-

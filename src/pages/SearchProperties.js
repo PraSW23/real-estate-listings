@@ -1,5 +1,5 @@
 // src/pages/SearchProperties.js
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProperties, getNewProperties } from '../actions/propertyActions';
 import PropertyCard from '../components/PropertyCard';
@@ -7,7 +7,6 @@ import { CircularProgress, Container, Typography, Grid, Box, TextField, Button }
 import debounce from 'lodash/debounce';
 
 const SearchProperties = () => {
-  const [searchParams, setSearchParams] = useState({});
   const dispatch = useDispatch();
   const { properties, loading } = useSelector(state => state.property);
 
@@ -20,11 +19,7 @@ const SearchProperties = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setSearchParams(prevState => {
-      const newParams = { ...prevState, [name]: value };
-      debouncedSearch(newParams);
-      return newParams;
-    });
+    debouncedSearch({ [name]: value });
   };
 
   const handleLatestProperties = () => {
@@ -124,4 +119,3 @@ const SearchProperties = () => {
 };
 
 export default SearchProperties;
-
