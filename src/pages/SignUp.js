@@ -1,29 +1,44 @@
 // src/pages/SignUp.js
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../actions/authActions';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, Snackbar } from '@mui/material';
+import { Alert } from '@mui/material';
+import { AlertTitle } from '@mui/material';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    mobileNumber: '' // Added mobileNumber field
+    mobileNumber: ''
   });
 
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false); 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
+  const authError = useSelector(state => state.auth.error);
+
   const { name, email, password, mobileNumber } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
-    await dispatch(register({ name, email, password, mobileNumber })); // Include mobileNumber in the register action
-    navigate('/UserDashboard');
+    try {
+      await dispatch(register({ name, email, password, mobileNumber }));
+      navigate('/UserDashboard');
+    } catch (err) {
+      setOpen(true); 
+    }
   };
 
   return (
@@ -85,6 +100,24 @@ const SignUp = () => {
           Already a User? <Link to="/login" style={{ color: '#ff4081', textDecoration: 'none' }}>Login</Link>
         </Typography>
       </Box>
+      {/* Snackbar to display error message */}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          <AlertTitle>Error! User already exists</AlertTitle>
+          {authError}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

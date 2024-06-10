@@ -9,7 +9,12 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(app.use(cors({
+  origin: 'https://real-estate-listings-ochre.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true 
+})));
+
 app.use(express.json());
 
 // Connect to MongoDB
