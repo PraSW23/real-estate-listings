@@ -1,7 +1,7 @@
 // src/pages/PropertyDetails.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box, Grid, IconButton } from '@mui/material';
+import { CircularProgress, Card, CardContent, CardMedia, Container, Typography, Box, IconButton } from '@mui/material';
 import ContactAgent from '../components/ContactAgent';
 import axios from '../utils/axiosInstance';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -39,12 +39,11 @@ const PropertyDetails = () => {
 
   const handleLikeClick = () => {
     if (!user || !user._id) {
-      // Redirect to signup/login page if user is not authenticated
       navigate('/signup');
       return;
     }
     const propertyId = property._id;
-    dispatch(updateFavoriteProperties(propertyId)); // Dispatch action to update favorites
+    dispatch(updateFavoriteProperties(propertyId));
     setProperty(prevProperty => ({
       ...prevProperty,
       isLiked: !prevProperty.isLiked
@@ -105,3 +104,4 @@ const PropertyDetails = () => {
 };
 
 export default PropertyDetails;
+

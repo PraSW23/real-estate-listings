@@ -9,11 +9,10 @@ const PropertySearch = () => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  // Create a debounced version of the getProperties function
   const debouncedSearch = useCallback(
     debounce((searchQuery) => {
-      dispatch(getProperties(searchQuery));
-    }, 500), // Adjust the debounce delay as needed
+      dispatch(getProperties({ query: searchQuery }));
+    }, 500),
     [dispatch]
   );
 
@@ -38,3 +37,4 @@ const PropertySearch = () => {
 };
 
 export default PropertySearch;
+

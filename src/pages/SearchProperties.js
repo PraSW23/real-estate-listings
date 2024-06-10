@@ -124,3 +124,4 @@ const SearchProperties = () => {
 };
 
 export default SearchProperties;
+
