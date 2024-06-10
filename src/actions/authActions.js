@@ -75,9 +75,19 @@ export const register = user => async dispatch => {
     setAuthToken(res.data.token); 
     dispatch(loadUser()); 
   } catch (err) {
+    let errorMessage = 'An error occurred. Please try again later.';
+    if (err.response && err.response.status === 400) {
+      errorMessage = 'User already exists. Please use a different email.';
+    } else if (err.response && err.response.data && err.response.data.message) {
+      errorMessage = err.response.data.message;
+    }
     dispatch({
-      type: AUTH_ERROR
+      type: AUTH_ERROR,
+      payload: errorMessage
     });
+
+    // Throwing an error here when registration fails
+    throw new Error(errorMessage);
   }
 };
 
