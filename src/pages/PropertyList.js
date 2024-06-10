@@ -1,7 +1,8 @@
 // src/pages/PropertyList.js
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProperties } from '../actions/propertyActions';
+import { getProperties, getNewProperties } from '../actions/propertyActions'; // Import getNewProperties action
 import PropertyCard from '../components/PropertyCard';
 
 const PropertyList = () => {
@@ -10,6 +11,7 @@ const PropertyList = () => {
 
   useEffect(() => {
     dispatch(getProperties());
+    dispatch(getNewProperties()); // Fetch new properties
   }, [dispatch]);
 
   if (loading) {
@@ -20,13 +22,9 @@ const PropertyList = () => {
     <div>
       <h1>Property List</h1>
       <div>
-        {Array.isArray(properties) && properties.length > 0 ? (
-          properties.map(property => (
-            <PropertyCard key={property._id} property={property} />
-          ))
-        ) : (
-          <div>No properties found.</div>
-        )}
+        {properties.map(property => (
+          <PropertyCard key={property._id} property={property} />
+        ))}
       </div>
     </div>
   );
