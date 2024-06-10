@@ -39,7 +39,7 @@ const propertyReducer = (state = initialState, action) => {
       return {
         ...state,
         properties: action.payload,
-        loading: false
+        loading: false,
       };  
     case UPDATE_PROPERTY:
       return {
