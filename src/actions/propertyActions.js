@@ -5,20 +5,19 @@ import {
   GET_PROPERTY,
   ADD_PROPERTY,
   UPDATE_PROPERTY,
-  DELETE_PROPERTY
+  DELETE_PROPERTY,
+  GET_NEW_PROPERTIES,
 } from '../reducers/ActionTypes';
 
-export const getProperties = () => async dispatch => {
+export const getProperties = (params = {}) => async dispatch => {
   try {
-     console.log('Fetching properties with query:'); 	
-    const res = await axiosInstance.get('/properties');
-    console.log('Properties fetched:', res.data);
+    const query = new URLSearchParams(params).toString();
+    const res = await axiosInstance.get(`/properties?${query}`);
     dispatch({
       type: GET_PROPERTIES,
       payload: res.data
     });
   } catch (err) {
-    console.error(err);
     console.error('Error fetching properties:', err);
   }
 };
@@ -62,6 +61,7 @@ export const updateProperty = (id, property) => async dispatch => {
 export const deleteProperty = id => async dispatch => {
   try {
     await axiosInstance.delete(`/properties/${id}`);
+    await axiosInstance.post('/properties/removeFavoriteProperty', { propertyId: id });
     dispatch({
       type: DELETE_PROPERTY,
       payload: id
@@ -70,4 +70,14 @@ export const deleteProperty = id => async dispatch => {
     console.error(err);
   }
 };
-
+export const getNewProperties = () => async dispatch => { // Add this action
+  try {
+    const res = await axiosInstance.get('/properties/new');
+    dispatch({
+      type: GET_NEW_PROPERTIES,
+      payload: res.data
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

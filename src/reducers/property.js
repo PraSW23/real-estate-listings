@@ -4,7 +4,8 @@ import {
   GET_PROPERTY, 
   ADD_PROPERTY, 
   UPDATE_PROPERTY, 
-  DELETE_PROPERTY 
+  DELETE_PROPERTY,
+  GET_NEW_PROPERTIES, 
 } from './ActionTypes';
 
 const initialState = {
@@ -34,6 +35,12 @@ const propertyReducer = (state = initialState, action) => {
         properties: [...state.properties, action.payload],
         loading: false,
       };
+    case GET_NEW_PROPERTIES: 
+      return {
+        ...state,
+        properties: action.payload,
+        loading: false
+      };  
     case UPDATE_PROPERTY:
       return {
         ...state,

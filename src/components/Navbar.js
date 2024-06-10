@@ -41,7 +41,7 @@ const Navbar = () => {
 
   const commonMenuItems = [
     { text: 'Home', path: '/' },
-    { text: 'New Properties', path: '/NewProperties' },
+    { text: 'New Properties', path: '/new-properties' },
     { text: 'Search Properties', path: '/SearchProperties' },
   ];
 

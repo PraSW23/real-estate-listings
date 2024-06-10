@@ -9,19 +9,20 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    mobileNumber: '' // Added mobileNumber field
   });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { name, email, password } = formData;
+  const { name, email, password, mobileNumber } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
-    await dispatch(register({ name, email, password }));
+    await dispatch(register({ name, email, password, mobileNumber })); // Include mobileNumber in the register action
     navigate('/UserDashboard');
   };
 
@@ -60,6 +61,15 @@ const SignUp = () => {
           onChange={onChange}
           margin="normal"
           required
+          sx={{ marginBottom: '20px' }}
+        />
+        <TextField
+          fullWidth
+          label="Mobile Number"
+          name="mobileNumber"
+          value={mobileNumber}
+          onChange={onChange}
+          margin="normal"
           sx={{ marginBottom: '20px' }}
         />
         <Button

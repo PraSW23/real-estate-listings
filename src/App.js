@@ -15,6 +15,8 @@ import MyProperties from './pages/MyProperties';
 import AddProperty from './pages/AddProperty';
 import UpdateProperty from './pages/UpdateProperty';
 import { loadUser } from './actions/authActions';
+import NewProperties from './pages/NewProperties';
+import SearchProperties from './pages/SearchProperties';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,6 +40,8 @@ const App = () => {
         <Route path="/MyProperties" element={<MyProperties />} />
         <Route path="/AddProperty" element={<AddProperty />} />
         <Route path="/UpdateProperty/:id" element={<UpdateProperty />} />
+        <Route path="/new-properties" element={<NewProperties />} />
+        <Route path="/SearchProperties" element={<SearchProperties />} />
       </Routes>
     </Router>
   );

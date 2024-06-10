@@ -104,9 +104,9 @@ router.put('/user/favorite', auth, async (req, res) => {
   }
 });
 
-// Route to update user's mobile number
-router.put('/user/mobile', auth, async (req, res) => {
-  const { mobileNumber } = req.body;
+// Route to update user's profile
+router.put('/user', auth, async (req, res) => {
+  const { name, mobileNumber } = req.body;
 
   try {
     const user = await User.findById(req.user.id);
@@ -114,15 +114,17 @@ router.put('/user/mobile', auth, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    user.mobileNumber = mobileNumber;
-    await user.save();
+    user.name = name || user.name;
+    user.mobileNumber = mobileNumber || user.mobileNumber;
 
+    await user.save();
     res.json(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
+
 
 // Route to update the count of properties viewed by the user
 router.put('/user/properties-viewed', auth, async (req, res) => {
@@ -135,33 +137,6 @@ router.put('/user/properties-viewed', auth, async (req, res) => {
     user.propertiesViewedCount += 1;
     await user.save();
 
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
-// Route to handle like icon click on property card
-// Route to update user's favorite properties
-router.put('/user/favorite', auth, async (req, res) => {
-  const { propertyId } = req.body;
-
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    if (user.favoriteProperties.includes(propertyId)) {
-      // Remove propertyId if it exists
-      user.favoriteProperties = user.favoriteProperties.filter(id => id.toString() !== propertyId);
-    } else {
-      // Add propertyId if it doesn't exist
-      user.favoriteProperties.push(propertyId);
-    }
-
-    await user.save();
     res.json(user);
   } catch (err) {
     console.error(err.message);

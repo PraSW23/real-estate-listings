@@ -41,13 +41,24 @@ export const login = credentials => async dispatch => {
       payload: res.data
     });
 
-    setCookie('token', res.data.token, 1); // Store token in cookie for 1 day
-    setAuthToken(res.data.token); // Set token in axios instance
-    dispatch(loadUser()); // Load user data after successful login
+    setCookie('token', res.data.token, 30); 
+    setAuthToken(res.data.token); 
+    dispatch(loadUser()); 
   } catch (err) {
+    
+    let errorMessage = 'An error occurred. Please try again later.';
+    if (err.response && err.response.status === 400) {
+      errorMessage = 'Invalid credentials. Please check your email and password.';
+    } else if (err.response && err.response.data && err.response.data.message) {
+      errorMessage = err.response.data.message;
+    }
     dispatch({
-      type: AUTH_ERROR
+      type: AUTH_ERROR,
+      payload: errorMessage // Set the error message in the payload
     });
+
+    // Throwing an error here when login fails
+    throw new Error(errorMessage);
   }
 };
 
@@ -60,9 +71,9 @@ export const register = user => async dispatch => {
       payload: res.data
     });
 
-    setCookie('token', res.data.token, 1); // Store token in cookie for 1 day
-    setAuthToken(res.data.token); // Set token in axios instance
-    dispatch(loadUser()); // Load user data after successful registration
+    setCookie('token', res.data.token, 30); 
+    setAuthToken(res.data.token); 
+    dispatch(loadUser()); 
   } catch (err) {
     dispatch({
       type: AUTH_ERROR

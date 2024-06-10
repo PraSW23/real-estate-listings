@@ -1,16 +1,26 @@
 // src/components/PropertySearch.js
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { getProperties } from '../actions/propertyActions';
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Box } from '@mui/material';
+import debounce from 'lodash/debounce';
 
 const PropertySearch = () => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  const handleSearch = () => {
-    // Assuming the backend supports search query
-    dispatch(getProperties(query));
+  // Create a debounced version of the getProperties function
+  const debouncedSearch = useCallback(
+    debounce((searchQuery) => {
+      dispatch(getProperties(searchQuery));
+    }, 500), // Adjust the debounce delay as needed
+    [dispatch]
+  );
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setQuery(value);
+    debouncedSearch(value);
   };
 
   return (
@@ -18,14 +28,11 @@ const PropertySearch = () => {
       <TextField
         variant="outlined"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleSearch}
         placeholder="Search properties..."
         fullWidth
         sx={{ marginRight: 2 }}
       />
-      <Button variant="contained" color="primary" onClick={handleSearch}>
-        Search
-      </Button>
     </Box>
   );
 };

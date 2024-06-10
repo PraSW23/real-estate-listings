@@ -34,20 +34,18 @@ const UserProfile = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    bio: '',
-    mobileNumber: '', // Add mobileNumber to the formData state
+    mobileNumber: '',
   });
 
   useEffect(() => {
-    if (!user) {
-      dispatch(loadUser());
-    } else {
+    if (user) {
       setFormData({
-        name: user.name,
-        email: user.email,
-        bio: user.bio || '',
-        mobileNumber: user.mobileNumber || '', // Initialize mobileNumber
+        name: user.name || '',
+        email: user.email || '',
+        mobileNumber: user.mobileNumber || '',
       });
+    } else {
+      dispatch(loadUser());
     }
   }, [user, dispatch]);
 
@@ -81,6 +79,9 @@ const UserProfile = () => {
               <Typography variant="body1" color="textSecondary">
                 {user && user.email}
               </Typography>
+              <Typography variant="body1" color="textSecondary">
+                Mob. No.: {user && user.mobileNumber}
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <form onSubmit={handleSubmit}>
@@ -111,17 +112,6 @@ const UserProfile = () => {
                   margin="normal"
                   value={formData.mobileNumber}
                   onChange={handleChange}
-                />
-                <TextField
-                  fullWidth
-                  label="Bio"
-                  name="bio"
-                  variant="outlined"
-                  margin="normal"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  multiline
-                  rows={4}
                 />
                 <CardActions>
                   <Button type="submit" color="primary" variant="contained" fullWidth>

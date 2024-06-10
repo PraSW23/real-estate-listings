@@ -5,17 +5,40 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const User = require('../models/User');
 
-// Get all properties
-router.get('/', async (req, res) => {
+// Get all properties sorted by date (newest first)
+router.get('/new', async (req, res) => {
     try {
-        const properties = await Property.find().populate('user', 'name');
+        const properties = await Property.find().sort({ date: -1 }).populate('user', 'name');
+        res.json(properties);
+    } catch (error) {
+        console.error('Error fetching new properties:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get all properties with advanced search
+router.get('/', async (req, res) => {
+    const { query, description, location, owner, minPrice, maxPrice } = req.query;
+    try {
+        let searchCriteria = {};
+
+        if (query) searchCriteria.title = new RegExp(query, 'i');
+        if (description) searchCriteria.description = new RegExp(description, 'i');
+        if (location) searchCriteria.location = new RegExp(location, 'i');
+        if (owner) {
+            const user = await User.findOne({ name: new RegExp(owner, 'i') });
+            if (user) searchCriteria.user = user._id;
+        }
+        if (minPrice) searchCriteria.price = { ...searchCriteria.price, $gte: minPrice };
+        if (maxPrice) searchCriteria.price = { ...searchCriteria.price, $lte: maxPrice };
+
+        const properties = await Property.find(searchCriteria).populate('user', 'name');
         res.json(properties);
     } catch (error) {
         console.error('Error fetching properties:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 // Get a single property by ID
 router.get('/:id', async (req, res) => {
     try {
@@ -38,12 +61,15 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete a property
 router.delete('/:id', async (req, res) => {
     try {
         const deletedProperty = await Property.findByIdAndDelete(req.params.id);
         if (!deletedProperty) return res.status(404).json({ message: 'Property not found' });
-        res.json({ message: 'Property deleted' });
+        await User.updateMany(
+            { favoriteProperties: req.params.id },
+            { $pull: { favoriteProperties: req.params.id } }
+        );
+        res.json({ message: 'Property deleted and removed from favorites' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -72,12 +98,8 @@ router.get('/user/:id', async (req, res) => {
 
 // Route to add a new property
 router.post('/', auth, async (req, res) => {
-    console.log('Add property route hit');
-    //const { title, description, price, location } = req.body; // Changed 'address' to 'location'
-    //console.log(req.body);
+    
     try {
-        console.log('Request Headers:', req.headers); // Log headers
-        console.log('Request Body:', req.body); // Log body
 
         const { image, title, description, price, location } = req.body;
 
@@ -95,5 +117,21 @@ router.post('/', auth, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+
+// Route to remove a favorite property from all users
+router.post('/removeFavoriteProperty', async (req, res) => {
+    const { propertyId } = req.body;
+    try {
+        await User.updateMany(
+            { favoriteProperties: propertyId },
+            { $pull: { favoriteProperties: propertyId } }
+        );
+        res.json({ message: 'Property removed from favorites' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 module.exports = router;
