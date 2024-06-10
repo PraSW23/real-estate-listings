@@ -9,25 +9,29 @@ const PropertySearch = () => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  const handleSearch = useCallback(
-    debounce((value) => {
-      dispatch(getProperties({ query: value }));
+  // Create a debounced version of the getProperties function with proper dependencies
+  const debouncedSearch = useCallback(
+    debounce((searchQuery) => {
+      dispatch(getProperties({ query: searchQuery }));
     }, 500),
     [dispatch]
   );
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setQuery(value);
-    handleSearch(value);
-  };
+  const handleSearch = useCallback(
+    (e) => {
+      const { value } = e.target;
+      setQuery(value);
+      debouncedSearch(value);
+    },
+    [debouncedSearch] // dependency is debouncedSearch
+  );
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" mt={2} mb={2}>
       <TextField
         variant="outlined"
         value={query}
-        onChange={handleChange}
+        onChange={handleSearch}
         placeholder="Search properties..."
         fullWidth
         sx={{ marginRight: 2 }}

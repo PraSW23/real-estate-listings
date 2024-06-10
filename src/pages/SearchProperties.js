@@ -10,25 +10,29 @@ const SearchProperties = () => {
   const dispatch = useDispatch();
   const { properties, loading } = useSelector(state => state.property);
 
-  const handleInputChange = useCallback(
+  // Create a debounced version of the getProperties function with proper dependencies
+  const debouncedSearch = useCallback(
     debounce((params) => {
       dispatch(getProperties(params));
     }, 500),
     [dispatch]
   );
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    handleInputChange({ [name]: value });
-  };
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      debouncedSearch({ [name]: value });
+    },
+    [debouncedSearch] // dependency is debouncedSearch
+  );
 
-  const handleLatestProperties = () => {
+  const handleLatestProperties = useCallback(() => {
     dispatch(getNewProperties());
-  };
+  }, [dispatch]); // dependency is dispatch
 
-  const handleOldestProperties = () => {
+  const handleOldestProperties = useCallback(() => {
     dispatch(getProperties({ sort: 'oldest' }));
-  };
+  }, [dispatch]); // dependency is dispatch
 
   return (
     <Container>
@@ -43,7 +47,7 @@ const SearchProperties = () => {
               name="query"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -52,7 +56,7 @@ const SearchProperties = () => {
               name="description"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -61,7 +65,7 @@ const SearchProperties = () => {
               name="location"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -70,7 +74,7 @@ const SearchProperties = () => {
               name="owner"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={6} sm={3} md={2}>
@@ -80,7 +84,7 @@ const SearchProperties = () => {
               type="number"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={6} sm={3} md={2}>
@@ -90,7 +94,7 @@ const SearchProperties = () => {
               type="number"
               variant="outlined"
               fullWidth
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </Grid>
         </Grid>
