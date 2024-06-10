@@ -1,4 +1,6 @@
 // src/pages/NewProperties.js
+// src/pages/NewProperties.js
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNewProperties } from '../actions/propertyActions';
@@ -39,7 +41,7 @@ const NewProperties = () => {
         New Properties
       </Typography>
       <Grid container spacing={4}>
-        {properties.map((property) => (
+        {Array.isArray(properties) && properties.map((property) => ( // Check if properties is an array
           <Grid item xs={12} sm={6} md={4} key={property._id}>
             <PropertyCard>
               <img src={property.image} alt={property.title} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '10px' }} />

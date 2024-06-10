@@ -47,7 +47,7 @@ const SavedProperties = () => {
           <Typography variant="body1">You have no saved properties.</Typography>
         ) : (
           <Grid container spacing={4}>
-            {favoriteProperties.map((property) => (
+            {favoriteProperties.map(property => (
               <Grid item xs={12} sm={6} md={4} key={property._id}>
                 <PropertyCard property={property} />
               </Grid>

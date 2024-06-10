@@ -20,13 +20,16 @@ const PropertyList = () => {
     <div>
       <h1>Property List</h1>
       <div>
-        {properties.map(property => (
-          <PropertyCard key={property._id} property={property} />
-        ))}
+        {Array.isArray(properties) && properties.length > 0 ? (
+          properties.map(property => (
+            <PropertyCard key={property._id} property={property} />
+          ))
+        ) : (
+          <div>No properties found.</div>
+        )}
       </div>
     </div>
   );
 };
 
 export default PropertyList;
-
