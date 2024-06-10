@@ -15,7 +15,6 @@ import {
   Divider,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import './Navbar.css';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
