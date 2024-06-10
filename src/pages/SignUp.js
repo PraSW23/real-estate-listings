@@ -114,7 +114,7 @@ const SignUp = () => {
             </IconButton>
           }
         >
-          <AlertTitle>Error! User already exists</AlertTitle>
+          <AlertTitle>Error! {authError}</AlertTitle> {/* Modified to display authError */}
           {authError}
         </Alert>
       </Snackbar>
