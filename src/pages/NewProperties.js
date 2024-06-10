@@ -1,5 +1,4 @@
 // src/pages/NewProperties.js
-// src/pages/NewProperties.js
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

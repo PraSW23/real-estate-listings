@@ -1,4 +1,5 @@
 // src/actions/propertyActions.js
+
 import axiosInstance from '../utils/axiosInstance';
 import {
   GET_PROPERTIES,
@@ -70,6 +71,7 @@ export const deleteProperty = id => async dispatch => {
     console.error(err);
   }
 };
+
 export const getNewProperties = () => async dispatch => { // Add this action
   try {
     const res = await axiosInstance.get('/properties/new');
