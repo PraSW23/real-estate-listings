@@ -1,34 +1,31 @@
 //backend/server.js
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
-const authRoutes = require('./routes/authRoutes');
+const cors = require('cors');
 const propertyRoutes = require('./routes/propertyRoutes');
+const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
 const app = express();
 
 // Middleware
+app.use(cors({
+  origin: 'https://real-estate-listings-seven.vercel.app/',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true 
+}));
+
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
 
-// API Routes
-app.use('/api/auth', authRoutes);
+// Routes
 app.use('/api/properties', propertyRoutes);
+app.use('/api/auth', authRoutes);
 
-// Serve static assets if in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
-
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
