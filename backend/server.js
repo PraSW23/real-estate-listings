@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(app.use(cors({
-  origin: 'https://real-estate-listings-x4pw.vercel.app/',
+  origin: 'https://real-estate-listings-api.vercel.app/',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true 
 })));

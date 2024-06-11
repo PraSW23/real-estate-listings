@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://real-estate-listings-x4pw.vercel.app/api', // Updating with backend URL
+  baseURL: 'https://real-estate-listings-api.vercel.app/api', // Updating with backend URL
   headers: {
     'Content-Type': 'application/json'
   }
