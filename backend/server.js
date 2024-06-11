@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://real-estate-listings-seven.vercel.app/',
+  origin: ['https://real-estate-listings-seven.vercel.app', 'https://a1ce-2402-3a80-401c-61ff-cfbe-f5f4-cb9d-8007.ngrok-free.app'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true 
 }));
