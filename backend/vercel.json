@@ -9,7 +9,7 @@
         "dest": "backend/$1"
       },
       {
-        "src": "/",
+        "src": "/(.*)",
         "dest": "backend/server.js"
       }
     ]
