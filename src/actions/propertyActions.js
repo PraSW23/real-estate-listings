@@ -14,6 +14,7 @@ export const getProperties = (params = {}) => async dispatch => {
   try {
     const query = new URLSearchParams(params).toString();
     const res = await axiosInstance.get(`/properties?${query}`);
+    console.log('Fetched properties:', res.data);
     dispatch({
       type: GET_PROPERTIES,
       payload: res.data
