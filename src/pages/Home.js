@@ -1,10 +1,20 @@
-// src/pages/PropertyList.js
+// src/pages/Home.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProperties } from '../actions/propertyActions';
+import { getProperties, deleteProperty } from '../actions/propertyActions'; // Import deleteProperty action
 import PropertyCard from '../components/PropertyCard';
+import PropertySearch from '../components/PropertySearch';
+import { CircularProgress, Container, Typography, Grid, Box } from '@mui/material';
+import { styled } from '@mui/system';
 
-const PropertyList = () => {
+const Title = styled(Typography)(({ theme }) => ({
+  margin: theme.spacing(2),
+  textAlign: 'center',
+  fontWeight: 700,
+  color: theme.palette.primary.main,
+}));
+
+const Home = () => {
   const dispatch = useDispatch();
   const { properties, loading } = useSelector(state => state.property);
 
@@ -12,20 +22,35 @@ const PropertyList = () => {
     dispatch(getProperties());
   }, [dispatch]);
 
+  const handleDelete = (propertyId) => { // Define handleDelete function
+    dispatch(deleteProperty(propertyId));
+  };
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h1>Property List</h1>
-      <div>
+    <Container>
+      <Title variant="h4" gutterBottom>
+        Properties
+      </Title>
+      <Box mb={3}>
+        <PropertySearch />
+      </Box>
+      <Grid container spacing={3}>
         {properties.map(property => (
-          <PropertyCard key={property._id} property={property} />
+          <Grid item xs={12} sm={6} md={4} key={property._id}>
+            <PropertyCard property={property} onDelete={handleDelete} /> {/* Pass onDelete function */}
+          </Grid>
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Container>
   );
 };
 
-export default PropertyList;
+export default Home;
