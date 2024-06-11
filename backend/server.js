@@ -9,11 +9,11 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(app.use(cors({
+app.use(cors({
   origin: 'https://real-estate-listings-api.vercel.app/',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true 
-})));
+}));
 
 app.use(express.json());
 
@@ -21,7 +21,6 @@ app.use(express.json());
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
-
 
 // Routes
 app.use('/api/properties', propertyRoutes);
