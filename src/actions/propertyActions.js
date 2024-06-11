@@ -10,10 +10,10 @@ import {
   GET_NEW_PROPERTIES,
 } from '../reducers/ActionTypes';
 
-export const getProperties = (params = {}) => async dispatch => {
+export const getProperties = () => async dispatch => {
   try {
-    const query = new URLSearchParams(params).toString();
-    const res = await axiosInstance.get(`/properties?${query}`);
+    //const query = new URLSearchParams(params).toString();
+    const res = await axiosInstance.get(`/properties`);
     console.log('Fetched properties:', res.data);
     dispatch({
       type: GET_PROPERTIES,
