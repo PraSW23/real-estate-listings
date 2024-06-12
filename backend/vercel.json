@@ -1,10 +1,16 @@
 {
   "version": 2,
+  "name": "real-estate-listings",
   "builds": [
-    { "src": "backend/server.js", "use": "@vercel/node" }
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/server.js" },
-    { "src": "/(.*)", "dest": "/backend/server.js" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    }
   ]
 }

@@ -26,6 +26,11 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 app.use('/api/properties', propertyRoutes);
 app.use('/api/auth', authRoutes);
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+// Export the app for serverless function handling
+module.exports = app;
+
+// Start server if not in a serverless environment
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+}
