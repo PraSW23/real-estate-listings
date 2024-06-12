@@ -9,7 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
 import { styled } from '@mui/system';
-import { Title } from '@mui/icons-material';
+//import { Title } from '@mui/icons-material';
 
 const AnimatedIconButton = styled(IconButton)({
   transition: 'transform 0.3s',
