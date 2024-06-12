@@ -20,11 +20,21 @@ app.use(express.json());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // Routes
-app.use('/api/properties', propertyRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/properties', (req, res, next) => {
+  console.log(`Request received at /api/properties - ${new Date().toISOString()}`);
+  next();
+}, propertyRoutes);
+
+app.use('/api/auth', (req, res, next) => {
+  console.log(`Request received at /api/auth - ${new Date().toISOString()}`);
+  next();
+}, authRoutes);
 
 // Export the app for serverless function handling
 module.exports = app;
