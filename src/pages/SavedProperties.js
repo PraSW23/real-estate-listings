@@ -4,6 +4,18 @@ import { useSelector } from 'react-redux';
 import { Container, Box, Typography, Grid, CircularProgress } from '@mui/material';
 import PropertyCard from '../components/PropertyCard';
 import axios from '../utils/axiosInstance';
+import { styled } from '@mui/system';
+
+const Title = styled(Typography)(({ theme }) => ({
+  margin: theme.spacing(4, 0),
+  textAlign: 'center',
+  fontWeight: 700,
+  color: theme.palette.primary.main,
+  fontSize: '2rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+}));
+
 
 const SavedProperties = () => {
   const favoritePropertyIds = useSelector(state => state.auth.user.favoriteProperties);
@@ -40,9 +52,9 @@ const SavedProperties = () => {
   return (
     <Container>
       <Box my={4}>
-        <Typography variant="h4" gutterBottom>
+        <Title variant="h4" gutterBottom>
           Saved Properties
-        </Typography>
+        </Title>
         {favoriteProperties.length === 0 ? (
           <Typography variant="body1">You have no saved properties.</Typography>
         ) : (

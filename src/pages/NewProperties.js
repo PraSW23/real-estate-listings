@@ -7,6 +7,16 @@ import { Grid, Paper, Typography, CircularProgress, Button } from '@mui/material
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 
+const Title = styled(Typography)(({ theme }) => ({
+  margin: theme.spacing(4, 0),
+  textAlign: 'center',
+  fontWeight: 700,
+  color: theme.palette.primary.main,
+  fontSize: '2rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+}));
+
 
 const Container = styled('div')({
   flexGrow: 1,
@@ -36,9 +46,9 @@ const NewProperties = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
+      <Title variant="h4" gutterBottom>
         New Properties
-      </Typography>
+      </Title>
       <Grid container spacing={4}>
         {Array.isArray(properties) && properties.map((property) => ( // Check if properties is an array
           <Grid item xs={12} sm={6} md={4} key={property._id}>

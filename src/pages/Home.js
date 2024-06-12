@@ -8,10 +8,13 @@ import { CircularProgress, Container, Typography, Grid, Box } from '@mui/materia
 import { styled } from '@mui/system';
 
 const Title = styled(Typography)(({ theme }) => ({
-  margin: theme.spacing(2),
+  margin: theme.spacing(4, 0),
   textAlign: 'center',
   fontWeight: 700,
   color: theme.palette.primary.main,
+  fontSize: '2rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
 }));
 
 const Home = () => {

@@ -9,6 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
 import { styled } from '@mui/system';
+import { Title } from '@mui/icons-material';
 
 const AnimatedIconButton = styled(IconButton)({
   transition: 'transform 0.3s',
@@ -16,6 +17,17 @@ const AnimatedIconButton = styled(IconButton)({
     transform: 'scale(1.2)',
   },
 });
+
+const Title = styled(Typography)(({ theme }) => ({
+  margin: theme.spacing(4, 0),
+  textAlign: 'center',
+  fontWeight: 700,
+  color: theme.palette.primary.main,
+  fontSize: '2rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+}));
+
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -60,9 +72,9 @@ const PropertyDetails = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom sx={{ margin: 2 }}>
+      <Title variant="h4" gutterBottom >
         Property Details
-      </Typography>
+      </Title>
       <Card sx={{ mb: 4 }}>
         <CardMedia
           component="img"

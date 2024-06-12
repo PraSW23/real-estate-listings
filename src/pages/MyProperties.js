@@ -7,6 +7,17 @@
   import axios from '../utils/axiosInstance';
   import HomeWorkIcon from '@mui/icons-material/HomeWork';
   import noPropertiesImage from '../no_property.jpg';
+  import { styled } from '@mui/system';
+
+  const Title = styled(Typography)(({ theme }) => ({
+    margin: theme.spacing(4, 0),
+    textAlign: 'center',
+    fontWeight: 700,
+    color: theme.palette.primary.main,
+    fontSize: '2rem',
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+  }));
 
   const MyProperties = () => {
     const user = useSelector(state => state.auth.user);
@@ -52,9 +63,9 @@
     return (
       <Container>
         <Box my={4}>
-          <Typography variant="h4" gutterBottom>
+          <Title variant="h4" gutterBottom>
             My Properties
-          </Typography>
+          </Title>
           <Button variant="contained" color="primary" component={Link} to="/AddProperty">
             Add New Property
           </Button>
