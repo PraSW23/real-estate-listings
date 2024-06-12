@@ -20,27 +20,12 @@ app.use(express.json());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  });
+  .catch(err => console.error(err));
 
 // Routes
-app.use('/api/properties', (req, res, next) => {
-  console.log(`Request received at /api/properties - ${new Date().toISOString()}`);
-  next();
-}, propertyRoutes);
+app.use('/api/properties', propertyRoutes);
+app.use('/api/auth', authRoutes);
 
-app.use('/api/auth', (req, res, next) => {
-  console.log(`Request received at /api/auth - ${new Date().toISOString()}`);
-  next();
-}, authRoutes);
-
-// Export the app for serverless function handling
-module.exports = app;
-
-// Start server if not in a serverless environment
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-}
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
