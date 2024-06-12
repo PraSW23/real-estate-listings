@@ -1,11 +1,15 @@
 // src/components/PropertyCard.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box, Menu, MenuItem } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Button, IconButton, CardMedia, Box, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Grid } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import EmailIcon from '@mui/icons-material/Email';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavoriteProperties } from '../actions/authActions';
@@ -48,6 +52,7 @@ const PropertyCard = ({ property, onDelete }) => {
   const user = useSelector(state => state.auth.user);
   const [isFavorite, setIsFavorite] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +80,42 @@ const PropertyCard = ({ property, onDelete }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/PropertyDetails/${property._id}`);
+    handleClose();
+    alert('Link copied to clipboard!');
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+    handleClose();
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleShareVia = (platform) => {
+    const propertyLink = `${window.location.origin}/PropertyDetails/${property._id}`;
+    let shareUrl = '';
+    switch (platform) {
+      case 'gmail':
+        shareUrl = `mailto:?subject=Check out this property&body=${propertyLink}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=Check out this property: ${propertyLink}`;
+        break;
+      case 'instagram':
+        // Instagram does not support direct sharing via URL. You can open Instagram and paste the link manually.
+        alert('Instagram does not support direct sharing. Please copy the link and share manually.');
+        return;
+      default:
+        break;
+    }
+    window.open(shareUrl, '_blank');
+    setDialogOpen(false);
   };
 
   return (
@@ -117,8 +158,14 @@ const PropertyCard = ({ property, onDelete }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Share via Email</MenuItem>
-          <MenuItem onClick={handleClose}>Share via Social Media</MenuItem>
+          <MenuItem onClick={handleCopyLink}>
+            <ContentCopyIcon sx={{ marginRight: 1 }} />
+            Copy Link
+          </MenuItem>
+          <MenuItem onClick={handleDialogOpen}>
+            <ShareIcon sx={{ marginRight: 1 }} />
+            Share via...
+          </MenuItem>
         </Menu>
         <AnimatedIconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
           <FavoriteIcon color={isFavorite ? 'secondary' : 'action'} />
@@ -134,6 +181,31 @@ const PropertyCard = ({ property, onDelete }) => {
           </>
         )}
       </CardActions>
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Share via</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item>
+              <IconButton onClick={() => handleShareVia('gmail')}>
+                <EmailIcon fontSize="large" color="primary" />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleShareVia('whatsapp')}>
+                <WhatsAppIcon fontSize="large" style={{ color: '#25D366' }} />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => handleShareVia('instagram')}>
+                <InstagramIcon fontSize="large" style={{ color: '#E4405F' }} />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </StyledCard>
   );
 };
